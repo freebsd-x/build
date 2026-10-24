@@ -1,0 +1,38 @@
+# FreeBSD-X build options
+# Configure with: meson setup build -Doption=value
+
+option('enable_xwayland',
+  type        : 'boolean',
+  value       : true,
+  description : 'Build with XWayland compatibility support',
+)
+
+option('enable_remote_desktop',
+  type        : 'boolean',
+  value       : true,
+  description : 'Build the built-in VNC/RFB remote desktop service',
+)
+
+option('enable_pkg_signing',
+  type        : 'boolean',
+  value       : true,
+  description : 'Build package signature verification (requires minisign or gpg at runtime)',
+)
+
+option('enable_vulkan_validation',
+  type        : 'boolean',
+  value       : false,
+  description : 'Enable Vulkan validation layers (debug builds only)',
+)
+
+option('apps_install_dir',
+  type        : 'string',
+  value       : '/usr/local/apps',
+  description : 'Directory where .xapp bundles are installed',
+)
+
+option('socket_path',
+  type        : 'string',
+  value       : '/tmp/freebsdx.sock',
+  description : 'Path for the XBus Unix domain socket',
+)
