@@ -651,6 +651,15 @@ if gtest_dep.found()
     suite : 'unit',
   )
 
+  test('xserver infra_parse',
+    executable('xserver_infra_parse_test',
+      ['core/xserver/tests/unit/infra_parse_test.cc'],
+      include_directories : inc_root,
+      dependencies        : [gtest_dep],
+    ),
+    suite : 'unit',
+  )
+
   test('xserver kmod_list',
     executable('xserver_kmod_list_test',
       ['core/xserver/tests/unit/kmod_list_test.cc'],
@@ -1088,6 +1097,7 @@ if gtest_dep.found()
       'core/xserver/src/sysadmin_services.cc',
       'core/xserver/src/user_services.cc',
       'core/xserver/src/device_services.cc',
+      'core/xserver/src/infra_services.cc',
       'core/xserver/src/battery_health_service.cc',
       'core/xserver/src/audio_output_service.cc',
       'core/xserver/src/gpu_monitor_service.cc',
