@@ -1141,6 +1141,7 @@ if gtest_dep.found()
       'core/xserver/src/personal_services.cc',
       'core/xserver/src/desktop_services.cc',
       'core/xserver/src/ime_service.cc',
+      'core/xserver/src/login_items_service.cc',
       'core/xserver/src/app_sandbox_service.cc',
       'core/xserver/src/permission_store.cc',
       'core/xserver/src/notif_services.cc',
