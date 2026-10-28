@@ -236,7 +236,11 @@ test('xsessiond smoke',
 # ── Service daemons ────────────────────────────────────────────────────────────
 # Simple single-service daemons share ipc_socket.cc.
 foreach svc : [
-  ['xnotify',  'core/services/xnotify/src/main.cc',  'core/xserver/src/notification_service.cc'],
+  # xnotify also needs the quiet-hours gate + notification sounds it consults.
+  ['xnotify',  'core/services/xnotify/src/main.cc',  ['core/xserver/src/notification_service.cc',
+                                                      'core/xserver/src/notif_services.cc',
+                                                      'core/xserver/src/dnd_service.cc',
+                                                      'core/xserver/src/config_service.cc']],
   ['xportal',  'core/services/xportal/src/main.cc',  'core/xserver/src/portal_service.cc'],
   ['xstorage', 'core/services/xstorage/src/main.cc', 'core/xserver/src/storage_service.cc'],
   ['xconfig',  'core/services/xconfig/src/main.cc',  'core/xserver/src/config_service.cc'],
@@ -665,6 +669,15 @@ if gtest_dep.found()
       ['core/xserver/tests/unit/personal_parse_test.cc'],
       include_directories : inc_root,
       dependencies        : [gtest_dep, libcrypto_dep],
+    ),
+    suite : 'unit',
+  )
+
+  test('xserver notif_parse',
+    executable('xserver_notif_parse_test',
+      ['core/xserver/tests/unit/notif_parse_test.cc'],
+      include_directories : inc_root,
+      dependencies        : [gtest_dep],
     ),
     suite : 'unit',
   )
@@ -1108,6 +1121,7 @@ if gtest_dep.found()
       'core/xserver/src/device_services.cc',
       'core/xserver/src/infra_services.cc',
       'core/xserver/src/personal_services.cc',
+      'core/xserver/src/notif_services.cc',
       'core/xserver/src/calendar_service.cc',
       'core/xserver/src/lock_service_stub.cc',
       'core/xserver/src/battery_health_service.cc',
