@@ -28,6 +28,7 @@ libpng_dep    = dependency('libpng16',        required : true)
 thread_dep    = dependency('threads')
 xkbcommon_dep = dependency('xkbcommon',       required : true)
 poppler_cpp_dep = dependency('poppler-cpp',   required : true)
+cups_dep      = dependency('cups',            required : true)
 curl_dep      = dependency('libcurl',         required : true)
 
 cpp = meson.get_compiler('cpp')
@@ -178,6 +179,7 @@ compositor_deps = [
   freetype_dep, harfbuzz_dep, fontconfig_dep,
   thread_dep, libpng_dep, xkbcommon_dep,
   libpam_dep, libcrypto_dep, libarchive_dep, libutil_dep, libexecinfo_dep,
+  cups_dep,
 ]
 
 # ── Compositor executable ──────────────────────────────────────────────────────
@@ -640,6 +642,15 @@ if gtest_dep.found()
     suite : 'unit',
   )
 
+  test('xserver input_devices',
+    executable('xserver_input_devices_test',
+      ['core/xserver/tests/unit/input_devices_test.cc'],
+      include_directories : inc_root,
+      dependencies        : [gtest_dep],
+    ),
+    suite : 'unit',
+  )
+
   test('xserver kmod_list',
     executable('xserver_kmod_list_test',
       ['core/xserver/tests/unit/kmod_list_test.cc'],
@@ -1076,6 +1087,7 @@ if gtest_dep.found()
       'core/xserver/src/kmod_service.cc',
       'core/xserver/src/sysadmin_services.cc',
       'core/xserver/src/user_services.cc',
+      'core/xserver/src/device_services.cc',
       'core/xserver/src/battery_health_service.cc',
       'core/xserver/src/audio_output_service.cc',
       'core/xserver/src/gpu_monitor_service.cc',
@@ -1094,7 +1106,7 @@ if gtest_dep.found()
       'core/xserver/src/broadcast_stub.cc',
       'core/xserver/src/priv_broker_stub.cc',
       include_directories : inc_root,
-      dependencies        : [gtest_dep, thread_dep],
+      dependencies        : [gtest_dep, thread_dep, cups_dep],
     ),
     suite   : 'smoke',
     timeout : 30,
