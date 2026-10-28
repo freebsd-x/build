@@ -691,6 +691,15 @@ if gtest_dep.found()
     suite : 'unit',
   )
 
+  test('xserver hangul',
+    executable('xserver_hangul_test',
+      ['core/xserver/tests/unit/hangul_test.cc'],
+      include_directories : inc_root,
+      dependencies        : [gtest_dep],
+    ),
+    suite : 'unit',
+  )
+
   test('xserver kmod_list',
     executable('xserver_kmod_list_test',
       ['core/xserver/tests/unit/kmod_list_test.cc'],
@@ -1131,6 +1140,7 @@ if gtest_dep.found()
       'core/xserver/src/infra_services.cc',
       'core/xserver/src/personal_services.cc',
       'core/xserver/src/desktop_services.cc',
+      'core/xserver/src/ime_service.cc',
       'core/xserver/src/app_sandbox_service.cc',
       'core/xserver/src/permission_store.cc',
       'core/xserver/src/notif_services.cc',
