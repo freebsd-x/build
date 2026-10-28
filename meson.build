@@ -660,6 +660,15 @@ if gtest_dep.found()
     suite : 'unit',
   )
 
+  test('xserver personal_parse',
+    executable('xserver_personal_parse_test',
+      ['core/xserver/tests/unit/personal_parse_test.cc'],
+      include_directories : inc_root,
+      dependencies        : [gtest_dep, libcrypto_dep],
+    ),
+    suite : 'unit',
+  )
+
   test('xserver kmod_list',
     executable('xserver_kmod_list_test',
       ['core/xserver/tests/unit/kmod_list_test.cc'],
@@ -1098,6 +1107,9 @@ if gtest_dep.found()
       'core/xserver/src/user_services.cc',
       'core/xserver/src/device_services.cc',
       'core/xserver/src/infra_services.cc',
+      'core/xserver/src/personal_services.cc',
+      'core/xserver/src/calendar_service.cc',
+      'core/xserver/src/lock_service_stub.cc',
       'core/xserver/src/battery_health_service.cc',
       'core/xserver/src/audio_output_service.cc',
       'core/xserver/src/gpu_monitor_service.cc',
@@ -1116,7 +1128,7 @@ if gtest_dep.found()
       'core/xserver/src/broadcast_stub.cc',
       'core/xserver/src/priv_broker_stub.cc',
       include_directories : inc_root,
-      dependencies        : [gtest_dep, thread_dep, cups_dep],
+      dependencies        : [gtest_dep, thread_dep, cups_dep, libcrypto_dep],
     ),
     suite   : 'smoke',
     timeout : 30,
