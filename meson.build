@@ -700,6 +700,15 @@ if gtest_dep.found()
     suite : 'unit',
   )
 
+  test('xserver keymap_xkb',
+    executable('xserver_keymap_xkb_test',
+      ['core/xserver/tests/unit/keymap_xkb_test.cc'],
+      include_directories : inc_root,
+      dependencies        : [gtest_dep, xkbcommon_dep],
+    ),
+    suite : 'unit',
+  )
+
   test('xserver kmod_list',
     executable('xserver_kmod_list_test',
       ['core/xserver/tests/unit/kmod_list_test.cc'],
