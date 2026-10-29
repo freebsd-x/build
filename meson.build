@@ -1151,6 +1151,7 @@ if gtest_dep.found()
       'core/xserver/src/desktop_services.cc',
       'core/xserver/src/ime_service.cc',
       'core/xserver/src/login_items_service.cc',
+      'core/xserver/src/extras_services.cc',
       'core/xserver/src/default_apps_service.cc',
       'core/xserver/src/keyboard_shortcuts_service.cc',
       'core/xserver/src/trusted_devices_service.cc',
