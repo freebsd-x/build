@@ -1153,6 +1153,7 @@ if gtest_dep.found()
       'core/xserver/src/dock_service.cc',
       'core/xserver/src/gesture_service.cc',
       'core/xserver/src/a11y_settings_service.cc',
+      'core/xserver/src/speech.cc',
       'core/xserver/src/update_channel_service.cc',
       'core/xserver/src/spatial_audio_service.cc',
       'core/xserver/src/stylus_service.cc',
