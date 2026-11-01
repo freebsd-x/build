@@ -192,25 +192,13 @@ executable('freebsdx',
   install             : true,
 )
 
-# Tiny setuid-root PAM helper: lets the unprivileged compositor verify a
-# password without running the whole display server as root. install_mode makes
-# `sudo meson install` set it setuid root (owner root, mode 4755) automatically —
-# exactly how the base system ships su/login — so no manual chmod is needed.
-executable('xauthcheck',
-  ['core/xserver/src/xauthcheck.cc'],
-  include_directories : inc_root,
-  dependencies        : [libpam_dep],
-  install             : true,
-  install_mode        : ['rwsr-xr-x', 'root', 'root'],
-)
-
 # xsessiond: unified seat + session daemon (phase 1 = authentication). Runs as
 # root (started by rc.d / init), so the unprivileged compositor can verify a
 # password over a socket instead of a per-check setuid exec. libpam for auth;
 # libseat for the opt-in phase-2b libseat-client mode (XSESSIOND_LIBSEAT). No
 # compositor deps. See core/xserver/docs/xsessiond-design.md.
 xsessiond_exe = executable('xsessiond',
-  ['core/xserver/src/xsessiond.cc'],
+  ['core/xserver/daemons/xsessiond/xsessiond.cc'],
   include_directories : inc_root,
   dependencies        : [libpam_dep, libseat_dep],
   install             : true,
@@ -285,6 +273,18 @@ executable('xnetwork',
    'core/xserver/src/crash_handler.cc'],
   include_directories : inc_root,
   dependencies        : [thread_dep, libexecinfo_dep],
+  install             : true,
+)
+
+# Network fetches for sandboxed apps (com.freebsdx.Fetch; spawned by the compositor).
+executable('xfetch',
+  ['core/xserver/daemons/xfetch/xfetch.cc',
+   'core/xserver/src/ipc_socket.cc',
+   'core/xserver/src/xbus_message_pool.cc',
+   'core/xserver/src/broadcast_stub.cc',
+   'core/xserver/src/crash_handler.cc'],
+  include_directories : inc_root,
+  dependencies        : [thread_dep, libexecinfo_dep, curl_dep],
   install             : true,
 )
 
@@ -375,11 +375,11 @@ executable('pdfviewer',
   install             : true,
 )
 
-# Maps needs libcurl (OSM tiles + Nominatim geocoding + GPS) and libpng (tiles).
+# Maps needs libpng (tiles); its network goes through com.freebsdx.Fetch (xfetch).
 executable('maps',
   'apps/Maps.xapp/src/main.cc',
   include_directories : inc_root,
-  dependencies        : [freebsdx_ui_dep, curl_dep, libpng_dep],
+  dependencies        : [freebsdx_ui_dep, libpng_dep],
   install             : true,
 )
 
@@ -916,6 +916,16 @@ if gtest_dep.found()
     executable('xserver_permission_store_test',
       ['core/xserver/tests/unit/permission_store_test.cc',
        'core/xserver/src/permission_store.cc'],
+      include_directories : inc_root,
+      dependencies        : [gtest_dep, thread_dep],
+    ),
+    suite : 'unit',
+  )
+
+  # Fetch policy — per-app host allowlist + URL parsing for com.freebsdx.Fetch
+  test('xserver fetch_policy',
+    executable('xserver_fetch_policy_test',
+      'core/xserver/tests/unit/fetch_policy_test.cc',
       include_directories : inc_root,
       dependencies        : [gtest_dep, thread_dep],
     ),
