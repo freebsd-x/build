@@ -1167,6 +1167,7 @@ if gtest_dep.found()
       'core/xserver/src/opt_storage_service.cc',
       'core/xserver/src/mime_service.cc',
       'core/xserver/src/app_sandbox_service.cc',
+      'core/xserver/src/consent_broker.cc',
       'core/xserver/src/permission_store.cc',
       'core/xserver/src/notif_services.cc',
       'core/xserver/src/calendar_service.cc',
