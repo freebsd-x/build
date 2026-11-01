@@ -772,6 +772,15 @@ if gtest_dep.found()
     suite : 'unit',
   )
 
+  test('xserver spawn util',
+    executable('xserver_spawn_util_test',
+      ['core/xserver/tests/unit/spawn_util_test.cc'],
+      include_directories : inc_root,
+      dependencies        : [gtest_dep],
+    ),
+    suite : 'unit',
+  )
+
   test('xserver adblock apply',
     executable('xserver_adblock_apply_test',
       ['core/xserver/tests/unit/adblock_apply_test.cc'],
