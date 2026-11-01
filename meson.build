@@ -221,60 +221,10 @@ test('xsessiond smoke',
   timeout : 30,
 )
 
-# ── Service daemons ────────────────────────────────────────────────────────────
-# Simple single-service daemons share ipc_socket.cc.
-foreach svc : [
-  # xnotify also needs the quiet-hours gate + notification sounds it consults.
-  ['xnotify',  'core/services/xnotify/src/main.cc',  ['core/xserver/src/notification_service.cc',
-                                                      'core/xserver/src/notif_services.cc',
-                                                      'core/xserver/src/dnd_service.cc',
-                                                      'core/xserver/src/config_service.cc']],
-  ['xportal',  'core/services/xportal/src/main.cc',  'core/xserver/src/portal_service.cc'],
-  ['xstorage', 'core/services/xstorage/src/main.cc', 'core/xserver/src/storage_service.cc'],
-  ['xconfig',  'core/services/xconfig/src/main.cc',  'core/xserver/src/config_service.cc'],
-  ['xsystem',  'core/services/xsystem/src/main.cc',  'core/xserver/src/system_service.cc'],
-  ['xupdate',  'core/services/xupdate/src/main.cc',  'core/xserver/src/update_service.cc'],
-]
-  executable(svc[0],
-    [svc[1], svc[2],
-     'core/xserver/src/ipc_socket.cc',
-     'core/xserver/src/xbus_message_pool.cc',
-     'core/xserver/src/broadcast_stub.cc',
-     'core/xserver/src/crash_handler.cc'],
-    include_directories : inc_root,
-    dependencies        : [thread_dep, libexecinfo_dep],
-    install             : true,
-  )
-endforeach
-
-# xaudio needs privacy_service.cc (mic-mute enforcement checks PrivacyService::micBlocked())
-executable('xaudio',
-  ['core/services/xaudio/src/main.cc',
-   'core/xserver/src/audio_service.cc',
-   'core/xserver/src/privacy_service.cc',
-   'core/xserver/src/config_service.cc',
-   'core/xserver/src/ipc_socket.cc',
-   'core/xserver/src/xbus_message_pool.cc',
-   'core/xserver/src/broadcast_stub.cc',
-   'core/xserver/src/crash_handler.cc'],
-  include_directories : inc_root,
-  dependencies        : [thread_dep, libexecinfo_dep],
-  install             : true,
-)
-
-# xnetwork needs two service files
-executable('xnetwork',
-  ['core/services/xnetwork/src/main.cc',
-   'core/xserver/src/network_service.cc',
-   'core/xserver/src/config_service.cc',
-   'core/xserver/src/ipc_socket.cc',
-   'core/xserver/src/xbus_message_pool.cc',
-   'core/xserver/src/broadcast_stub.cc',
-   'core/xserver/src/crash_handler.cc'],
-  include_directories : inc_root,
-  dependencies        : [thread_dep, libexecinfo_dep],
-  install             : true,
-)
+# ── Daemons (core/xserver/daemons/) ────────────────────────────────────────────
+# xsessiond is defined above. The old per-service stubs (core/services/x*) were
+# retired 2026-11-01: they never ran and never joined XBus; every service lives
+# in the compositor. An out-of-process service registers like xfetch does.
 
 # Network fetches for sandboxed apps (com.freebsdx.Fetch; spawned by the compositor).
 executable('xfetch',
