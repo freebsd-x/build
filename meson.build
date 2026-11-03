@@ -883,6 +883,16 @@ if gtest_dep.found()
     suite : 'unit',
   )
 
+  # Shell-free spawning + Wi-Fi join commands (PSK vs the 802.11i vectors)
+  test('xserver spawn_wifi',
+    executable('xserver_spawn_wifi_test',
+      'core/xserver/tests/unit/spawn_wifi_test.cc',
+      include_directories : inc_root,
+      dependencies        : [gtest_dep, thread_dep, libcrypto_dep],
+    ),
+    suite : 'unit',
+  )
+
   # Fetch policy — per-app host allowlist + URL parsing for com.freebsdx.Fetch
   test('xserver fetch_policy',
     executable('xserver_fetch_policy_test',
