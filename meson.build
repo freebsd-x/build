@@ -238,9 +238,19 @@ executable('xfetch',
   install             : true,
 )
 
+# The panel builders, split by area so they compile in parallel.
+xshell_panel_srcs = files(
+  'core/xshell/src/shell_panels_system.cc',
+  'core/xshell/src/shell_panels_storage.cc',
+  'core/xshell/src/shell_panels_network.cc',
+  'core/xshell/src/shell_panels_devices.cc',
+  'core/xshell/src/shell_panels_display.cc',
+  'core/xshell/src/shell_panels_desktop.cc',
+)
+
 # ── Desktop shell ──────────────────────────────────────────────────────────────
 executable('xshell',
-  ['core/xshell/src/main.cc', 'core/xshell/src/shell_panels.cc', 'core/xshell/src/app_discovery.cc'],
+  ['core/xshell/src/main.cc', 'core/xshell/src/app_discovery.cc'] + xshell_panel_srcs,
   include_directories : [inc_root, include_directories('core/xshell/include')],
   dependencies        : [freebsdx_ui_dep, thread_dep],
   install             : true,
@@ -1001,8 +1011,7 @@ if gtest_dep.found()
     executable('xshell_panels_smoke_test',
       ['core/xshell/tests/panels_smoke_test.cc',
        'core/xshell/tests/panels_test_stubs.cc',
-       'core/xshell/src/shell_panels.cc',
-       'core/xshell/src/app_discovery.cc'],
+       'core/xshell/src/app_discovery.cc'] + xshell_panel_srcs,
       include_directories : [inc_root,
         include_directories('core/xshell/src'),
         include_directories('core/xshell/include')],
