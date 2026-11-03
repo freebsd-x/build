@@ -883,6 +883,14 @@ if gtest_dep.found()
     suite : 'unit',
   )
 
+  # The compositor never runs a shell on its own command strings (allowlist
+  # for the terminal and cron 'run now', which are shells by design).
+  test('xserver no-shell lint',
+    find_program('python3'),
+    args  : [files('scripts/lint-no-shell.py'), meson.project_source_root()],
+    suite : 'unit',
+  )
+
   # Shell-free spawning + Wi-Fi join commands (PSK vs the 802.11i vectors)
   test('xserver spawn_wifi',
     executable('xserver_spawn_wifi_test',
