@@ -872,6 +872,17 @@ if gtest_dep.found()
     suite : 'unit',
   )
 
+  # Parsers of downloaded / third-party data (mini_json, adblock): correct,
+  # hostile and fuzz-mutated input; run under ASan+UBSan by sanitize-tests.sh
+  test('xserver mini_json_fuzz',
+    executable('xserver_mini_json_fuzz_test',
+      'core/xserver/tests/unit/mini_json_fuzz_test.cc',
+      include_directories : inc_root,
+      dependencies        : [gtest_dep, thread_dep],
+    ),
+    suite : 'unit',
+  )
+
   # Fetch policy — per-app host allowlist + URL parsing for com.freebsdx.Fetch
   test('xserver fetch_policy',
     executable('xserver_fetch_policy_test',
@@ -1149,6 +1160,7 @@ if gtest_dep.found()
       'core/xserver/src/battery_drain_service.cc',
       'core/xserver/src/keymap_service.cc',
       'core/xserver/src/adblock_service.cc',
+      'core/xserver/src/fetch_broker.cc',
       'core/xserver/src/location_service.cc',
       'core/xserver/src/kbd_backlight_service.cc',
       'core/xserver/src/energy_service.cc',
