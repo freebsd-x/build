@@ -250,7 +250,7 @@ xshell_panel_srcs = files(
 
 # ── Desktop shell ──────────────────────────────────────────────────────────────
 executable('xshell',
-  ['core/xshell/src/main.cc', 'core/xshell/src/app_discovery.cc'] + xshell_panel_srcs,
+  ['core/xshell/src/main.cc', 'core/xshell/src/shell_broadcast.cc', 'core/xshell/src/app_discovery.cc'] + xshell_panel_srcs,
   include_directories : [inc_root, include_directories('core/xshell/include')],
   dependencies        : [freebsdx_ui_dep, thread_dep],
   install             : true,
