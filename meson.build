@@ -912,6 +912,22 @@ if gtest_dep.found()
   )
 
   # Fetch policy — per-app host allowlist + URL parsing for com.freebsdx.Fetch
+  test('xserver path_policy',
+    executable('xserver_path_policy_test',
+      'core/xserver/tests/unit/path_policy_test.cc',
+      include_directories : inc_root,
+      dependencies        : [gtest_dep, thread_dep],
+    ),
+    suite : 'unit',
+  )
+  test('xserver weather_parse',
+    executable('xserver_weather_parse_test',
+      'core/xserver/tests/unit/weather_parse_test.cc',
+      include_directories : inc_root,
+      dependencies        : [gtest_dep, thread_dep],
+    ),
+    suite : 'unit',
+  )
   test('xserver fetch_policy',
     executable('xserver_fetch_policy_test',
       'core/xserver/tests/unit/fetch_policy_test.cc',
