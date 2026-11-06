@@ -238,6 +238,20 @@ executable('xfetch',
   install             : true,
 )
 
+# Runs Wayland apps (the Browser's engine among them) on this compositor.
+subdir('core/wayland-bridge/build_common')
+executable('xwayland-bridge',
+  ['core/wayland-bridge/src/main.cc',
+   'core/wayland-bridge/src/wayland_bridge.cc',
+   'core/wayland-bridge/src/xwayland_manager.cc',
+   'core/xserver/src/ipc_socket.cc',
+   'core/xserver/src/xbus_message_pool.cc',
+   bridge_protocol_srcs],
+  include_directories : inc_root,
+  dependencies        : [wayland_server_dep, dependency('xkbcommon'), thread_dep],
+  install             : true,
+)
+
 # The panel builders, split by area so they compile in parallel.
 xshell_panel_srcs = files(
   'core/xshell/src/shell_panels_system.cc',
@@ -912,6 +926,14 @@ if gtest_dep.found()
   )
 
   # Fetch policy — per-app host allowlist + URL parsing for com.freebsdx.Fetch
+  test('xserver shm_frame',
+    executable('xserver_shm_frame_test',
+      'core/xserver/tests/unit/shm_frame_test.cc',
+      include_directories : inc_root,
+      dependencies        : [gtest_dep, thread_dep],
+    ),
+    suite : 'unit',
+  )
   test('xserver path_policy',
     executable('xserver_path_policy_test',
       'core/xserver/tests/unit/path_policy_test.cc',
