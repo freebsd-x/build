@@ -117,6 +117,7 @@ inc_root = include_directories(
 #   sdk/xkit    → libxkit,   xkit_dep   (depends on xrender_dep)
 subdir('sdk/xrender')
 subdir('sdk/xkit')
+subdir('sdk/xweb')
 
 # ── SDK shared library (libfreebsdx-ui) ───────────────────────────────────────
 # Bundles libxrender + libxkit into a single shared library that all apps link.
@@ -271,6 +272,14 @@ executable('xshell',
 )
 
 # ── Applications — standard (freebsdx_ui_dep only) ───────────────────────────
+# Our web engine's viewer: not an app yet, see sdk/xweb/README.md. It takes the
+# measurer's source, as xrender is in libfreebsdx-ui here and must exist only once.
+executable('xwebview',
+  'sdk/xweb/tools/xweb_view.cc', 'sdk/xweb/src/text_measurer.cc',
+  include_directories : inc_root,
+  dependencies        : [freebsdx_ui_dep, xweb_dep],
+)
+
 foreach app : [
   ['demoapp',     'apps/DemoApp.xapp/src/main.cc'],
   ['settings_app','apps/Settings.xapp/src/main.cc'],
