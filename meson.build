@@ -272,11 +272,18 @@ executable('xshell',
 )
 
 # ── Applications — standard (freebsdx_ui_dep only) ───────────────────────────
-# Our web engine's viewer: not an app yet, see sdk/xweb/README.md. It takes the
-# measurer's source, as xrender is in libfreebsdx-ui here and must exist only once.
+# Our web engine's viewer, alone and as the Browser app, which builds it in and adds
+# Chromium for what it can't do yet. Both take the measurer's source, as xrender is in
+# libfreebsdx-ui here and must exist only once.
 executable('xwebview',
   'sdk/xweb/tools/xweb_view.cc', 'sdk/xweb/src/text_measurer.cc',
   include_directories : inc_root,
+  dependencies        : [freebsdx_ui_dep, xweb_dep],
+)
+executable('browser',
+  'apps/Browser.xapp/src/main.cc', 'sdk/xweb/tools/xweb_view.cc', 'sdk/xweb/src/text_measurer.cc',
+  include_directories : inc_root,
+  cpp_args            : ['-DXWEB_VIEW_NO_MAIN'],
   dependencies        : [freebsdx_ui_dep, xweb_dep],
 )
 
@@ -287,7 +294,6 @@ foreach app : [
   ['calculator',  'apps/Calculator.xapp/src/main.cc'],
   ['appmanager',  'apps/AppManager.xapp/src/main.cc'],
   ['files',       'apps/Files.xapp/src/main.cc'],
-  ['browser',     'apps/Browser.xapp/src/main.cc'],
   ['imageviewer', 'apps/ImageViewer.xapp/src/main.cc'],
   ['calendar',    'apps/Calendar.xapp/src/main.cc'],
   ['texteditor',  'apps/TextEditor.xapp/src/main.cc'],
